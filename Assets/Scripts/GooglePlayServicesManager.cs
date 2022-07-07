@@ -6,41 +6,40 @@ using UnityEngine;
 
 public class GooglePlayServicesManager : MonoBehaviour
 {
-    public static GooglePlayServicesManager Instance;
+    public static GooglePlayServicesManager instance;
+    public bool isConnectedToGooglePlayServices;
 
-    [HideInInspector]
-    public bool IsConnectedToGooglePlayServies;
     private void Awake()
     {
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
 
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }
-    public void Start()
+
+    private void Start()
     {
-        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+        SignInToGooglePlayServices();
     }
 
-    internal void ProcessAuthentication(SignInStatus status)
+    public void SignInToGooglePlayServices()
     {
-        if (status == SignInStatus.Success)
+        PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (result) =>
         {
-            IsConnectedToGooglePlayServies = true;
-        }
-        else
-        {
-            IsConnectedToGooglePlayServies = false;
-        }
+            if (result == SignInStatus.Success)
+                isConnectedToGooglePlayServices = true;
+            else
+                isConnectedToGooglePlayServices = false;
+        });
     }
- 
+
     public void ShowAchievementsGoogleServices()
     {
-        if (IsConnectedToGooglePlayServies)
+        if (isConnectedToGooglePlayServices)
             Social.ShowAchievementsUI();
         else
             ShowAndroidToastMessage("Couldn't load google services!");
@@ -48,7 +47,7 @@ public class GooglePlayServicesManager : MonoBehaviour
 
     public void ShowLeaderboardsGoogleServices()
     {
-        if (IsConnectedToGooglePlayServies)
+        if (isConnectedToGooglePlayServices)
             Social.ShowLeaderboardUI();
         else
             ShowAndroidToastMessage("Couldn't load google services!");
