@@ -6,19 +6,18 @@ using UnityEngine;
 
 public class SaveData : MonoBehaviour
 {
-    private SaveData() { }
-    public static SaveData instance;
+    public static SaveData Instance;
 
-    public int vibration;
-    public int bestScore;
-    public string skinType;
+    public int Vibration;
+    public int BestScore;
+    public string SkinType;
 
     private void Awake()
     {
         Load();
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -26,9 +25,9 @@ public class SaveData : MonoBehaviour
     [System.Serializable]
     class SaveManager
     {
-        public int vibration;
-        public int bestScore;
-        public string skinType;
+        public int Vibration;
+        public int BestScore;
+        public string SkinType;
     }
 
 
@@ -36,9 +35,9 @@ public class SaveData : MonoBehaviour
     {
         SaveManager data = new SaveManager();
 
-        data.vibration = vibration;
-        data.bestScore = bestScore;
-        data.skinType = skinType;
+        data.Vibration = Vibration;
+        data.BestScore = BestScore;
+        data.SkinType = SkinType;
 
         string json = JsonUtility.ToJson(data);
         BinaryFormatter bFormatter = new BinaryFormatter();
@@ -60,9 +59,9 @@ public class SaveData : MonoBehaviour
             {
                 string json = (string)bFormatter.Deserialize(input);
                 SaveManager data = JsonUtility.FromJson<SaveManager>(json);
-                vibration = data.vibration;
-                bestScore = data.bestScore;
-                skinType = data.skinType;
+                Vibration = data.Vibration;
+                BestScore = data.BestScore;
+                SkinType = data.SkinType;
             }
         }
     }

@@ -21,8 +21,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private short numberOfObjectToFind;
 
-    public UnityEvent unityEventWrongIcon;
-    public UnityEvent unityEventCorrectIcon;
+    public UnityEvent UnityEventWrongIcon;
+    public UnityEvent UnityEventCorrectIcon;
 
     [Header("UI")]
     [SerializeField]
@@ -36,10 +36,10 @@ public class GameManager : MonoBehaviour
     private bool isGameOver = false;
 
     [SerializeField]
-    TextMeshProUGUI textScoreInGame;
+    private TextMeshProUGUI textScoreInGame;
 
     [SerializeField]
-    TextMeshProUGUI textScoreOnGameOver;
+    private TextMeshProUGUI textScoreOnGameOver;
 
     [SerializeField]
     private int numberOfLifes;
@@ -51,26 +51,26 @@ public class GameManager : MonoBehaviour
 
     [Header("Limited Game Mode")]
     [SerializeField]
-    TextMeshProUGUI textTime;
+    private TextMeshProUGUI textTime;
 
     [SerializeField]
     private float timeleft = 61;
 
     [Header("One VS One Game Mode")]
     [SerializeField]
-    TextMeshProUGUI textScoreLeftPlayer;
+    private TextMeshProUGUI textScoreLeftPlayer;
 
     [SerializeField]
     private int scoreLeftPlayer;
 
     [SerializeField]
-    TextMeshProUGUI textScoreRightPlayer;
+    private TextMeshProUGUI textScoreRightPlayer;
 
     [SerializeField]
     private int scoreRightPlayer;
 
-    public string leftOrRightPlayerScore = ""; // LeftCircle | RightCircle
-    public string leftOrRightClickedWrongIcon = ""; // LeftCircle | RightCircle
+    public string LeftOrRightPlayerScore = ""; // LeftCircle | RightCircle
+    public string LeftOrRightClickedWrongIcon = ""; // LeftCircle | RightCircle
 
     [SerializeField]
     private int numberOfLifesLeftPlayer;
@@ -79,7 +79,20 @@ public class GameManager : MonoBehaviour
     private int numberOfLifesRightPlayer;
 
     [SerializeField]
-    GameObject gameObjectBlockImage;
+    private GameObject gameObjectBlockImage;
+
+    public static GameManager Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            Application.targetFrameRate = 60;
+            Input.multiTouchEnabled = false;
+        }
+
+    }
 
     public void ShowPauseUI()
     {
@@ -99,29 +112,29 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator IncreaseScore()
     {
-        unityEventCorrectIcon?.Invoke();
+        UnityEventCorrectIcon?.Invoke();
         if (gameModeType == GameModeType.OneVSOne)
         {
-            if (leftOrRightPlayerScore.Equals("LeftCircle"))
+            if (LeftOrRightPlayerScore.Equals("LeftCircle"))
             {
                 scoreLeftPlayer += 5;
                 textScoreLeftPlayer.text = "" + scoreLeftPlayer;
             }
-            else if (leftOrRightPlayerScore.Equals("RightCircle"))
+            else if (LeftOrRightPlayerScore.Equals("RightCircle"))
             {
                 scoreRightPlayer += 5;
                 textScoreRightPlayer.text = "" + scoreRightPlayer;
             }
 
-            if (scoreLeftPlayer == GameMode.instance.pointsToGet && scoreRightPlayer == GameMode.instance.pointsToGet)
+            if (scoreLeftPlayer == GameMode.Instance.PointsToGet && scoreRightPlayer == GameMode.Instance.PointsToGet)
             {
                 GameOver("DRAW!");
             }
-            else if (scoreLeftPlayer == GameMode.instance.pointsToGet)
+            else if (scoreLeftPlayer == GameMode.Instance.PointsToGet)
             {
                 GameOver("LEFT PLAYER WON");
             }
-            else if (scoreRightPlayer == GameMode.instance.pointsToGet)
+            else if (scoreRightPlayer == GameMode.Instance.PointsToGet)
             {
                 GameOver("RIGHT PLAYER WON");
             }
@@ -158,7 +171,7 @@ public class GameManager : MonoBehaviour
 
     public void CorrectIcon(string leftOrRightPlayer = "")
     {
-        leftOrRightPlayerScore = leftOrRightPlayer;
+        LeftOrRightPlayerScore = leftOrRightPlayer;
         StartCoroutine(IncreaseScore());
     }
 
@@ -170,7 +183,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
 
-        if (VibrationManager.instance.GetVibration())
+        if (VibrationManager.Instance.IsVibration)
             Handheld.Vibrate();
 
         AudioManager.instance.PlayOnceClip(AudioClipType.wrongIcon);
@@ -180,11 +193,11 @@ public class GameManager : MonoBehaviour
 
         if (gameModeType == GameModeType.OneVSOne)
         {
-            if (leftOrRightClickedWrongIcon.Equals("LeftCircle"))
+            if (LeftOrRightClickedWrongIcon.Equals("LeftCircle"))
             {
                 Instantiate(gameObjectBlockImage, leftCircle[0].transform.parent.gameObject.GetComponent<Transform>());
             }
-            else if (leftOrRightClickedWrongIcon.Equals("RightCircle"))
+            else if (LeftOrRightClickedWrongIcon.Equals("RightCircle"))
             {
                 Instantiate(gameObjectBlockImage, rightCircle[0].transform.parent.gameObject.GetComponent<Transform>());
             }
@@ -201,15 +214,15 @@ public class GameManager : MonoBehaviour
 
     public void WrongIcon(string leftOrRightPlayer = "")
     {
-        leftOrRightClickedWrongIcon = leftOrRightPlayer;
-        if (leftOrRightClickedWrongIcon == "LeftCircle")
+        LeftOrRightClickedWrongIcon = leftOrRightPlayer;
+        if (LeftOrRightClickedWrongIcon == "LeftCircle")
         {
             numberOfLifesLeftPlayer--;
 
             if (numberOfLifesLeftPlayer == 0)
                 GameOver("RIGHT PLAYER WON");
         }
-        else if (leftOrRightClickedWrongIcon == "RightCircle")
+        else if (LeftOrRightClickedWrongIcon == "RightCircle")
         {
             numberOfLifesRightPlayer--;
 
@@ -221,7 +234,7 @@ public class GameManager : MonoBehaviour
         numberOfLifes--;
 
         StartCoroutine(ShowWrongIconEffect());
-        unityEventWrongIcon?.Invoke();
+        UnityEventWrongIcon?.Invoke();
 
 
         if (IsGameOver())
@@ -260,7 +273,7 @@ public class GameManager : MonoBehaviour
 
             SaveScore(message);
             
-            if (GooglePlayServicesManager.instance.isConnectedToGooglePlayServies && gameModeType == GameModeType.OneVSOne)
+            if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServies && gameModeType == GameModeType.OneVSOne)
             {
                 Social.ReportProgress(GPGSIds.achievement_play_with_friends, 100.0f, null);
             }
@@ -276,7 +289,7 @@ public class GameManager : MonoBehaviour
 
     private void SendAchivementProgress(int score)
     {
-        if (GooglePlayServicesManager.instance.isConnectedToGooglePlayServies && gameModeType == GameModeType.Normal)
+        if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServies && gameModeType == GameModeType.Normal)
         {
             switch (score)
             {
@@ -304,7 +317,7 @@ public class GameManager : MonoBehaviour
 
     private void SendProgressToGooglePlayServices()
     {
-        if (GooglePlayServicesManager.instance.isConnectedToGooglePlayServies && gameModeType == GameModeType.Normal)
+        if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServies && gameModeType == GameModeType.Normal)
         {
             Social.ReportScore(score, GPGSIds.leaderboard_top_score, (success) =>
             {
@@ -322,11 +335,11 @@ public class GameManager : MonoBehaviour
 
     private void SaveScore(string message)
     {
-        if ((SaveData.instance.bestScore < score) && gameModeType == GameModeType.Normal)
+        if ((SaveData.Instance.BestScore < score) && gameModeType == GameModeType.Normal)
         {
             textScoreOnGameOver.text = "NEW HIGHSCORE!\nSCORE: " + score;
-            SaveData.instance.bestScore = score;
-            SaveData.instance.Save();
+            SaveData.Instance.BestScore = score;
+            SaveData.Instance.Save();
         }
         else if (gameModeType == GameModeType.OneVSOne)
         {
@@ -348,19 +361,6 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private GameManager() { }
-    public static GameManager instance;
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            Application.targetFrameRate = 60;
-            Input.multiTouchEnabled = false;
-        }
-
-    }
 
     private string iconPath = "";
     List<Texture> allIcons;
@@ -369,13 +369,13 @@ public class GameManager : MonoBehaviour
     private GameModeType gameModeType;
     void Start()
     {
-        if (string.IsNullOrEmpty(SaveData.instance.skinType))
+        if (string.IsNullOrEmpty(SaveData.Instance.SkinType))
         {
             iconPath = "Icons/Devices";
         }
         else
         {
-            iconPath = "Icons/" + SaveData.instance.skinType;
+            iconPath = "Icons/" + SaveData.Instance.SkinType;
         }
 
         leftCircleAnimator = leftCircle[0].transform.parent.gameObject.GetComponent<Animator>();
@@ -383,7 +383,7 @@ public class GameManager : MonoBehaviour
 
         Draw();
 
-        gameModeType = GameMode.instance.GetGameModeType();
+        gameModeType = GameMode.Instance.GameModeType;
         switch (gameModeType)
         {
             case GameModeType.Practice:
@@ -437,7 +437,7 @@ public class GameManager : MonoBehaviour
 
     private void SetPlayerHealth()
     {
-        if (GameMode.instance.isHealthOn)
+        if (GameMode.Instance.IsHealthOn)
         {
             gameObjectPlayerHealth.gameObject.SetActive(true);
             numberOfLifesLeftPlayer = 3;
@@ -449,7 +449,7 @@ public class GameManager : MonoBehaviour
 
     private void SetPlayerTimer()
     {
-        if (GameMode.instance.isTimerOn)
+        if (GameMode.Instance.IsTimerOn)
             gameObjectOneVsOneTimerOn.gameObject.SetActive(true);
         else
             gameObjectOneVsOneTimerOn.gameObject.SetActive(false);
@@ -476,8 +476,8 @@ public class GameManager : MonoBehaviour
         //The same object
         var currRandom = Random.Range(0, 6);
 
-        leftCircle[numberOfObjectToFind].GetComponent<IconManager>().isDoubleDevice = true;
-        rightCircle[currRandom].GetComponent<IconManager>().isDoubleDevice = true;
+        leftCircle[numberOfObjectToFind].GetComponent<IconManager>().SetIsDoubleIcon(true);
+        rightCircle[currRandom].GetComponent<IconManager>().SetIsDoubleIcon(true);
         rightCircle[currRandom].GetComponent<RawImage>().texture = leftCircle[numberOfObjectToFind].GetComponent<RawImage>().texture;
         rightCircle[currRandom].GetComponent<RawImage>().SetNativeSize();
 
@@ -500,7 +500,7 @@ public class GameManager : MonoBehaviour
             //1.3f when animals
             circle[i].transform.localScale = new Vector3(1f, 1f, 1f);
 
-            circle[i].GetComponent<IconManager>().Reset();
+            circle[i].GetComponent<IconManager>().SetIsDoubleIcon(false);
         }
     }
 

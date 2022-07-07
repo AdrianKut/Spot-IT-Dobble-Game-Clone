@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -8,18 +6,33 @@ public class BlockImage : MonoBehaviour
     [SerializeField]
     private float timeleft = 3f;
 
-    TextMeshProUGUI textMeshProUGUI;
+    private TextMeshProUGUI textMeshProUGUI;
+
+    private void Awake()
+    {
+        textMeshProUGUI = GetComponent<TextMeshProUGUI>();
+    }
+
     void Start()
     {
-        textMeshProUGUI = this.gameObject.GetComponent<TextMeshProUGUI>();
-        GameManager.instance.unityEventCorrectIcon.AddListener(DestroyOnDemand);
+        GameManager.Instance.UnityEventCorrectIcon.AddListener(DestroyOnDemand);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.UnityEventCorrectIcon.RemoveListener(DestroyOnDemand);
     }
 
     void DestroyOnDemand() => Destroy(this.gameObject);
 
     void FixedUpdate()
     {
-        timeleft -= 1 * Time.deltaTime;
+        CoutdownToUnlockClickOnImage();
+    }
+
+    private void CoutdownToUnlockClickOnImage()
+    {
+        timeleft -= Time.deltaTime;
         if (timeleft <= 0f)
         {
             Destroy(this.gameObject);

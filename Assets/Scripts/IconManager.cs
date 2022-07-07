@@ -3,11 +3,10 @@ using UnityEngine.UI;
 
 public class IconManager : MonoBehaviour
 {
-
-    public bool isDoubleDevice = false;
+    public bool IsDoubleIcon { get; private set; } = false;
 
     private Button thisButton;
-    void Awake()
+    private void Awake()
     {
         thisButton = GetComponent<Button>();
     }
@@ -17,40 +16,41 @@ public class IconManager : MonoBehaviour
         thisButton.onClick.AddListener(Click);
     }
 
+    private void OnDisable()
+    {
+        thisButton.onClick.RemoveListener(Click);
+    }
+
     public void Click()
     {
-        if (isDoubleDevice)
+        if (IsDoubleIcon)
         {
-            if (GameMode.instance.GetGameModeType() == GameModeType.OneVSOne)
+            if (GameMode.Instance.GameModeType == GameModeType.OneVSOne)
             {
                 var currentCircle = this.gameObject.transform.parent.gameObject.tag;
-                GameManager.instance.CorrectIcon(currentCircle);
+                GameManager.Instance.CorrectIcon(currentCircle);
             }
             else
             {
-                GameManager.instance.CorrectIcon();
+                GameManager.Instance.CorrectIcon();
             }
         }
         else
         {
-            if (GameMode.instance.GetGameModeType() == GameModeType.OneVSOne)
+            if (GameMode.Instance.GameModeType == GameModeType.OneVSOne)
             {
                 var currentCircle = this.gameObject.transform.parent.gameObject.tag;
-                GameManager.instance.WrongIcon(currentCircle);
+                GameManager.Instance.WrongIcon(currentCircle);
             }
             else
             {
-                GameManager.instance.WrongIcon();
+                GameManager.Instance.WrongIcon();
             }
         }
     }
 
-
-
-
-    public void Reset()
+    public void SetIsDoubleIcon(bool value)
     {
-        isDoubleDevice = false;
+        IsDoubleIcon = value;
     }
-
 }

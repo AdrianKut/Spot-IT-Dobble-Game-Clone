@@ -6,49 +6,49 @@ public class HeartManager : MonoBehaviour
 {
 
     [SerializeField]
-    GameObject gameObjectHeartPrefab;
+    private GameObject gameObjectHeartPrefab;
 
     [SerializeField]
-    List<GameObject> childHeartGameObject;
+    private List<GameObject> childHeartGameObject;
 
     [SerializeField]
-    List<GameObject> childHeartLeftGameObject;
+    private List<GameObject> childHeartLeftGameObject;
 
     [SerializeField]
-    List<GameObject> childHeartRightGameObject;
+    private List<GameObject> childHeartRightGameObject;
 
     void Start()
     {
-        GameManager.instance.unityEventWrongIcon.AddListener(DestroyHeart);
+        GameManager.Instance.UnityEventWrongIcon.AddListener(DestroyHeart);
     }
 
     private void DestroyHeart()
     {
-        var whoClickedWrongIcon = GameManager.instance.leftOrRightClickedWrongIcon;
+        var whoClickedWrongIcon = GameManager.Instance.LeftOrRightClickedWrongIcon;
 
-        if (GameMode.instance.GetGameModeType() == GameModeType.OneVSOne)
+        if (GameMode.Instance.GameModeType == GameModeType.OneVSOne)
         {
             if (whoClickedWrongIcon == "LeftCircle")
             {
-                Destroy(childHeartLeftGameObject.First());
-                childHeartLeftGameObject.RemoveAt(0);
-
+                DestroyFirstGameObjectFromList(childHeartLeftGameObject);
             }
             else if (whoClickedWrongIcon == "RightCircle")
             {
-                Destroy(childHeartRightGameObject.First());
-                childHeartRightGameObject.RemoveAt(0);
+                DestroyFirstGameObjectFromList(childHeartRightGameObject);
             }
         }
         else
         {
-
-            Destroy(childHeartGameObject.First());
-            childHeartGameObject.RemoveAt(0);
-
+            DestroyFirstGameObjectFromList(childHeartGameObject);
             Instantiate(gameObjectHeartPrefab);
 
         }
+    }
+
+    private void DestroyFirstGameObjectFromList(List<GameObject> gameObjectList)
+    {
+        Destroy(gameObjectList.First());
+        gameObjectList.RemoveAt(0);
     }
 
 

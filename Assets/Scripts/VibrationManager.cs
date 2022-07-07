@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class VibrationManager : MonoBehaviour
 {
-    
+
     [SerializeField]
     private Sprite vibrationOnSprite;
 
@@ -16,39 +16,40 @@ public class VibrationManager : MonoBehaviour
     private Button button;
 
     [SerializeField]
-    private bool isVibration = true;
-    
-    [SerializeField]
     private int vibration = 1; // 1 - On | 0 - Off
-    public bool GetVibration() => isVibration == true ? true : false;
 
-    private VibrationManager() { }
-    public static VibrationManager instance;
+    public bool IsVibration = true;
+    public static VibrationManager Instance;
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
+        button = GetComponent<Button>();
     }
 
 
     void Start()
     {
-        vibration = SaveData.instance.vibration;
-        button = GetComponent<Button>();
+        vibration = SaveData.Instance.Vibration;
         button.onClick.AddListener(ChangeVibration);
-        
+
         SetVibration();
+    }
+
+    private void OnDisable()
+    {
+        button.onClick.RemoveListener(ChangeVibration);
     }
 
     private void SetVibration()
     {
         if (vibration == 0)
         {
-            SetButtonSprite(true,vibrationOnSprite);
+            SetButtonSprite(true, vibrationOnSprite);
         }
         else if (vibration == 1)
         {
@@ -58,26 +59,29 @@ public class VibrationManager : MonoBehaviour
 
     private void SetButtonSprite(bool enabled, Sprite sprite)
     {
-        isVibration = enabled;
+        IsVibration = enabled;
         button.image.sprite = sprite;
     }
 
 
     private void ChangeVibration()
     {
-        if (isVibration == false)
+        if (IsVibration == false)
         {
             SetButtonSprite(true, vibrationOnSprite);
-            vibration = 0;
-            SaveData.instance.vibration = vibration;
-            SaveData.instance.Save();
+            SaveVibrationOnOff(0, vibration);
         }
-        else if (isVibration == true)
+        else if (IsVibration == true)
         {
             SetButtonSprite(false, vibrationOffSprite);
-            vibration = 1;
-            SaveData.instance.vibration = vibration;
-            SaveData.instance.Save();
+            SaveVibrationOnOff(1, vibration);
         }
+    }
+
+    private void SaveVibrationOnOff(int value, int vibration)
+    {
+        this.vibration = value;
+        SaveData.Instance.Vibration = vibration;
+        SaveData.Instance.Save();
     }
 }

@@ -23,55 +23,56 @@ public enum GameSkins
 
 public class GameMode : MonoBehaviour
 {
-    private GameMode() { }
-    public static GameMode instance;
-
     [SerializeField]
     private LevelChanger levelChanger;
 
     [Header("One Vs One Settings")]
     [SerializeField]
-    GameObject gameObjectGameModeSettingsView;
+    private GameObject gameObjectGameModeSettingsView;
 
     [SerializeField]
-    GameObject gameObjectOneVsOneSettingsView;
+    private GameObject gameObjectOneVsOneSettingsView;
 
     [SerializeField]
-    Toggle timerToggle;
-
-    public bool isTimerOn = false; 
+    private Toggle timerToggle;
 
     [SerializeField]
-    Toggle healthToggle;
+    private Toggle healthToggle;
 
     [SerializeField]
-    TextMeshProUGUI textPointsToGet;
+    private TextMeshProUGUI textPointsToGet;
 
-    public int pointsToGet;
+    public int PointsToGet;
 
-    public bool isHealthOn = false;
+    public bool IsHealthOn = false;
+    public bool IsTimerOn = false;
 
+    public static GameMode Instance;
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
     }
 
-    private GameModeType gameModeType;
-    public GameModeType GetGameModeType() => gameModeType;
+    public GameModeType GameModeType;
 
     public void Show1vs1SettingsView()
     {
-        gameObjectGameModeSettingsView.SetActive(false);
-        gameObjectOneVsOneSettingsView.SetActive(true);
+        EnableView(gameObjectGameModeSettingsView, false);
+        EnableView(gameObjectOneVsOneSettingsView, true);
     }
 
     public void BackToGameModeView()
     {
-        gameObjectGameModeSettingsView.SetActive(true);
-        gameObjectOneVsOneSettingsView.SetActive(false);
+        EnableView(gameObjectGameModeSettingsView, true);
+        EnableView(gameObjectOneVsOneSettingsView, false);
+    }
+
+    private void EnableView(GameObject gameObject, bool activate)
+    {
+        gameObject.SetActive(activate);
     }
 
     public void StartSelectedGame(int levelToChoose)
@@ -79,23 +80,23 @@ public class GameMode : MonoBehaviour
         switch (levelToChoose)
         {
             case 1:
-                gameModeType = GameModeType.Practice;
+                GameModeType = GameModeType.Practice;
                 goto default;
 
             case 2:
-                gameModeType = GameModeType.Normal;
+                GameModeType = GameModeType.Normal;
                 goto default;
 
             case 3:
-                isTimerOn = timerToggle.isOn;
-                isHealthOn = healthToggle.isOn;
-                pointsToGet = int.Parse(textPointsToGet.text);
+                IsTimerOn = timerToggle.isOn;
+                IsHealthOn = healthToggle.isOn;
+                PointsToGet = int.Parse(textPointsToGet.text);
 
-                gameModeType = GameModeType.OneVSOne;
+                GameModeType = GameModeType.OneVSOne;
                 goto default;
 
             case 4:
-                gameModeType = GameModeType.Extreme;
+                GameModeType = GameModeType.Extreme;
                 goto default;
 
             default:

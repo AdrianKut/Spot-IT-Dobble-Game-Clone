@@ -5,20 +5,21 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-
-    private TextMeshProUGUI textTimer;
-
     [SerializeField]
     private float timeleft = 99;
 
-    // Start is called before the first frame update
-    void Start()
+    private TextMeshProUGUI textTimer;
+    private void Awake()
     {
         textTimer = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
+    {
+        Countdown();
+    }
+
+    private void Countdown()
     {
         if ((int)timeleft > 0)
         {
@@ -27,7 +28,7 @@ public class Timer : MonoBehaviour
         }
         else
         {
-            GameManager.instance.GameOverOneVsOneWithTimer();
+            GameManager.Instance.GameOverOneVsOneWithTimer();
         }
     }
 }

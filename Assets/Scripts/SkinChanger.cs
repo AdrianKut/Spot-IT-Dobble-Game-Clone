@@ -6,8 +6,8 @@ public class SkinChanger : MonoBehaviour
 {
     public void ChangeSkin(string skinType)
     {
-        SaveData.instance.skinType = skinType;
-        SaveData.instance.Save();
+        SaveData.Instance.SkinType = skinType;
+        SaveData.Instance.Save();
 
         transform.parent.gameObject.SetActive(false);
     }

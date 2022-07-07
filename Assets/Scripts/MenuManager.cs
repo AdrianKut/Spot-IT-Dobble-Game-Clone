@@ -4,21 +4,21 @@ using UnityEngine;
 public class MenuManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject gameObjectGameModeView;
+    private GameObject gameObjectGameModeView;
 
     [SerializeField]
-    GameObject gameObjectGameHelpView;
+    private GameObject gameObjectGameHelpView;
 
     [SerializeField]
-    GameObject gameObjectGameChangeSkinView;
+    private GameObject gameObjectGameChangeSkinView;
 
     [SerializeField]
-    TextMeshProUGUI textBestScore;
+    private TextMeshProUGUI textBestScore;
 
     private int bestScore = 0;
     private void Awake()
     {
-        bestScore = SaveData.instance.bestScore;
+        bestScore = SaveData.Instance.BestScore;
         SetText(textBestScore, "BEST SCORE: " + bestScore);
     }
 
@@ -34,18 +34,21 @@ public class MenuManager : MonoBehaviour
 
     public void ShowView(GameObject gameObjectToShow)
     {
-        gameObjectToShow.SetActive(true);
-
-        gameObjectToShow.transform.localScale = new Vector3(0, 0, 0);
-        gameObjectToShow.transform.LeanScale(new Vector3(1f, 1f, 1f), .5f).setEaseOutQuart();
+        EnableViewGameObject(gameObjectToShow, true, new Vector3(1f, 1f, 1f));
     }
 
     public void HiddeGameObject(GameObject gameObjectToHide)
     {
-        gameObjectToHide.transform.LeanScale(new Vector3(0f, 0f, 0f), .5f).setEaseOutQuart();
-        gameObjectToHide.SetActive(false);
+        EnableViewGameObject(gameObjectToHide, false, new Vector3(0f, 0f, 0f));
     }
 
+    private static void EnableViewGameObject(GameObject gameObject, bool activate, Vector3 vector3)
+    {
+        gameObject.SetActive(activate);
+
+        gameObject.transform.localScale = new Vector3(0, 0, 0);
+        gameObject.transform.LeanScale(vector3, .5f).setEaseOutQuart();
+    }
 
     public void QuitGame()
     {

@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public enum AudioClipType
 {
     wrongIcon = 0,
     correctIcon = 1,
     gameOver = 2,
-
 }
 
 
@@ -19,7 +17,6 @@ public class AudioManager : MonoBehaviour
 
     private AudioSource audioSource;
 
-    private AudioManager() { }
     public static AudioManager instance;
 
     private void Awake()
@@ -29,18 +26,14 @@ public class AudioManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-    }
 
-    void Start()
-    {
         audioSource = GetComponent<AudioSource>();
     }
-
 
     public void PlayOnceClip(AudioClipType audioClipType)
     {
         audioSource.PlayOneShot(audioClips[(int)audioClipType]);
-    
+
     }
-    
+
 }

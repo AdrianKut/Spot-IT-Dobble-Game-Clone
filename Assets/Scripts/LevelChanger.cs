@@ -5,9 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class LevelChanger : MonoBehaviour
 {
-
-	public Animator animator;
+	private Animator animator;
 	private int levelToLoad;
+
+	private void Awake()
+	{
+		animator = GetComponent<Animator>();
+	}
 
 	public void FadeToNextLevel(int levelToLoad)
 	{

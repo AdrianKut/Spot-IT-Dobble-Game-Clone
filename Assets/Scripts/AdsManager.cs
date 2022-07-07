@@ -6,7 +6,6 @@ using UnityEngine.Advertisements;
 public class AdsManager : MonoBehaviour
 {
     public static AdsManager instance;
-    private AdsManager() { }
 
     public static string gameId = "4802541";
     public static string intersititalAd = "Interstitial_Android";

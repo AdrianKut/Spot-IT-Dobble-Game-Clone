@@ -11,19 +11,19 @@ public class ButtonManager : MonoBehaviour
     public void PauseOnClick()
     {
         Time.timeScale = 0.0f;
-        GameManager.instance.ShowPauseUI();
+        GameManager.Instance.ShowPauseUI();
     }
 
     public void ResumeOnClick()
     {
         Time.timeScale = 1.0f;
-        GameManager.instance.HidePauseUI();
+        GameManager.Instance.HidePauseUI();
     }
 
     public void RetryOnClick()
     {
         Time.timeScale = 1.0f;
-        levelChanger.FadeToNextLevel((int)GameMode.instance.GetGameModeType());
+        levelChanger.FadeToNextLevel((int)GameMode.Instance.GameModeType);
     }
 
     public void MenuOnClick()

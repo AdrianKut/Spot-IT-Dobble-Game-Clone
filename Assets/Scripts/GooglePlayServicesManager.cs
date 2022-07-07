@@ -6,18 +6,18 @@ using UnityEngine;
 
 public class GooglePlayServicesManager : MonoBehaviour
 {
-    public static GooglePlayServicesManager instance;
+    public static GooglePlayServicesManager Instance;
 
     [HideInInspector]
-    public bool isConnectedToGooglePlayServies;
+    public bool IsConnectedToGooglePlayServies;
     private void Awake()
     {
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
 
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -30,17 +30,17 @@ public class GooglePlayServicesManager : MonoBehaviour
     {
         if (status == SignInStatus.Success)
         {
-            isConnectedToGooglePlayServies = true;
+            IsConnectedToGooglePlayServies = true;
         }
         else
         {
-            isConnectedToGooglePlayServies = false;
+            IsConnectedToGooglePlayServies = false;
         }
     }
  
     public void ShowAchievementsGoogleServices()
     {
-        if (isConnectedToGooglePlayServies)
+        if (IsConnectedToGooglePlayServies)
             Social.ShowAchievementsUI();
         else
             ShowAndroidToastMessage("Couldn't load google services!");
@@ -48,7 +48,7 @@ public class GooglePlayServicesManager : MonoBehaviour
 
     public void ShowLeaderboardsGoogleServices()
     {
-        if (isConnectedToGooglePlayServies)
+        if (IsConnectedToGooglePlayServies)
             Social.ShowLeaderboardUI();
         else
             ShowAndroidToastMessage("Couldn't load google services!");
