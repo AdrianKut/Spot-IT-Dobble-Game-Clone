@@ -273,7 +273,7 @@ public class GameManager : MonoBehaviour
 
             SaveScore(message);
             
-            if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServies && gameModeType == GameModeType.OneVSOne)
+            if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServices && gameModeType == GameModeType.OneVSOne)
             {
                 Social.ReportProgress(GPGSIds.achievement_play_with_friends, 100.0f, null);
             }
@@ -289,7 +289,7 @@ public class GameManager : MonoBehaviour
 
     private void SendAchivementProgress(int score)
     {
-        if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServies && gameModeType == GameModeType.Normal)
+        if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServices && gameModeType == GameModeType.Normal)
         {
             switch (score)
             {
@@ -317,7 +317,7 @@ public class GameManager : MonoBehaviour
 
     private void SendProgressToGooglePlayServices()
     {
-        if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServies && gameModeType == GameModeType.Normal)
+        if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServices && gameModeType == GameModeType.Normal)
         {
             Social.ReportScore(score, GPGSIds.leaderboard_top_score, (success) =>
             {

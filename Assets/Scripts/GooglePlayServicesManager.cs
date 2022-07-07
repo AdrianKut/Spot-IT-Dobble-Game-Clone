@@ -6,17 +6,17 @@ using UnityEngine;
 
 public class GooglePlayServicesManager : MonoBehaviour
 {
-    public static GooglePlayServicesManager instance;
-    public bool isConnectedToGooglePlayServices;
+    public static GooglePlayServicesManager Instance;
+    public bool IsConnectedToGooglePlayServices;
 
     private void Awake()
     {
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
 
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -31,15 +31,15 @@ public class GooglePlayServicesManager : MonoBehaviour
         PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (result) =>
         {
             if (result == SignInStatus.Success)
-                isConnectedToGooglePlayServices = true;
+                IsConnectedToGooglePlayServices = true;
             else
-                isConnectedToGooglePlayServices = false;
+                IsConnectedToGooglePlayServices = false;
         });
     }
 
     public void ShowAchievementsGoogleServices()
     {
-        if (isConnectedToGooglePlayServices)
+        if (IsConnectedToGooglePlayServices)
             Social.ShowAchievementsUI();
         else
             ShowAndroidToastMessage("Couldn't load google services!");
@@ -47,7 +47,7 @@ public class GooglePlayServicesManager : MonoBehaviour
 
     public void ShowLeaderboardsGoogleServices()
     {
-        if (isConnectedToGooglePlayServices)
+        if (IsConnectedToGooglePlayServices)
             Social.ShowLeaderboardUI();
         else
             ShowAndroidToastMessage("Couldn't load google services!");

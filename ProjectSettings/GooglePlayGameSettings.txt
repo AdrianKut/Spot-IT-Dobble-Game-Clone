@@ -1,5 +1,5 @@
-lastUpgrade=01101
-proj.pluginVersion=0.11.01
+lastUpgrade=01012
+proj.pluginVersion=0.10.12
 proj.AppId=817697800259
 and.BundleId=com.Games96.SpotITDobbleGame
 proj.classDir=Assets
