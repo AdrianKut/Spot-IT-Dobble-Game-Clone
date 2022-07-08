@@ -8,29 +8,39 @@ public class ButtonManager : MonoBehaviour
     [SerializeField]
     private LevelChanger levelChanger;
 
+    [SerializeField]
+    private GameObject pauseGameObjectUI;
+
     public void PauseOnClick()
     {
-        Time.timeScale = 0.0f;
-        GameManager.Instance.ShowPauseUI();
+        SetTimeScaleAndPauseActivate(0.0f, true);
     }
 
     public void ResumeOnClick()
     {
-        Time.timeScale = 1.0f;
-        GameManager.Instance.HidePauseUI();
+        SetTimeScaleAndPauseActivate(1.0f, false);
     }
 
     public void RetryOnClick()
     {
-        Time.timeScale = 1.0f;
-        levelChanger.FadeToNextLevel((int)GameMode.Instance.GameModeType);
+        SetDefaultTimeScaleAndChangeLevel((int)GameMode.Instance.GameModeType);
     }
 
     public void MenuOnClick()
     {
-        Time.timeScale = 1.0f;
-        levelChanger.FadeToNextLevel(0);
+        SetDefaultTimeScaleAndChangeLevel(0);
     }
 
+    private void SetTimeScaleAndPauseActivate(float timeScaleValue, bool activate)
+    {
+        Time.timeScale = timeScaleValue;
+        pauseGameObjectUI.SetActive(activate);
+    }
+
+    private void SetDefaultTimeScaleAndChangeLevel(int levelToLoad)
+    {
+        Time.timeScale = 1.0f;
+        levelChanger.FadeToNextLevel(levelToLoad);
+    }
 
 }

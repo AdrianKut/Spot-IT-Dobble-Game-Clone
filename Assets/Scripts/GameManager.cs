@@ -28,9 +28,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject gameOverGameObjectUI;
 
-    [SerializeField]
-    private GameObject pauseGameObjectUI;
-
     [Header("GAME MODES")]
     [SerializeField]
     private bool isGameOver = false;
@@ -94,17 +91,131 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void ShowPauseUI()
+    private string iconPath = "";
+    private List<Texture> allIcons;
+
+    [SerializeField]
+    private GameModeType gameModeType;
+    void Start()
     {
-        pauseGameObjectUI.SetActive(true);
+        if (string.IsNullOrEmpty(SaveData.Instance.SkinType))
+        {
+            iconPath = "Icons/Devices";
+        }
+        else
+        {
+            iconPath = "Icons/" + SaveData.Instance.SkinType;
+        }
+
+        leftCircleAnimator = leftCircle[0].transform.parent.gameObject.GetComponent<Animator>();
+        rightCircleAnimator = rightCircle[0].transform.parent.gameObject.GetComponent<Animator>();
+
+        Draw();
+
+        gameModeType = GameMode.Instance.GameModeType;
+        switch (gameModeType)
+        {
+            case GameModeType.Practice:
+                InitializeGameMode();
+                break;
+            case GameModeType.Normal:
+                InitializeGameMode();
+                break;
+            case GameModeType.OneVSOne:
+                InitializeOneVsOneGameMode();
+                break;
+            case GameModeType.Extreme:
+                InitializeGameMode();
+                SetBoolLeftAndRightAnimator("isRotate", leftCircleAnimator, rightCircleAnimator, true);
+                break;
+        }
+
+        Draw();
     }
 
-    public void HidePauseUI()
+    public void Draw()
     {
-        pauseGameObjectUI.SetActive(false);
+        allIcons = Resources.LoadAll<Texture>(iconPath).ToList();
+        numberOfObjectToFind = (short)Random.Range(0, 6);
+        AsignImages(leftCircle);
+        AsignImages(rightCircle);
+
+        //The same object
+        var currRandom = Random.Range(0, 6);
+
+        leftCircle[numberOfObjectToFind].GetComponent<IconManager>().SetIsDoubleIcon(true);
+        rightCircle[currRandom].GetComponent<IconManager>().SetIsDoubleIcon(true);
+        rightCircle[currRandom].GetComponent<RawImage>().texture = leftCircle[numberOfObjectToFind].GetComponent<RawImage>().texture;
+        rightCircle[currRandom].GetComponent<RawImage>().SetNativeSize();
     }
 
-    private void SetBoolLeftAndRightAnimaotr(string name, Animator leftCircleAnimator, Animator rightCircleAnimator, bool boolValue)
+    private void AsignImages(GameObject[] circle)
+    {
+        int currRandom;
+
+        for (int i = 0; i < circle.Length; i++)
+        {
+            currRandom = Random.Range(0, allIcons.Count - 1);
+            circle[i].GetComponent<RawImage>().texture = allIcons[currRandom];
+
+            var randomRotate = Random.Range(0, 180);
+            circle[i].GetComponent<RectTransform>().Rotate(new Vector3(0, 0, randomRotate));
+            allIcons.RemoveAt(currRandom);
+
+            circle[i].GetComponent<RawImage>().SetNativeSize();
+            circle[i].transform.localScale = new Vector3(1f, 1f, 1f);
+
+            circle[i].GetComponent<IconManager>().SetIsDoubleIcon(false);
+        }
+    }
+
+    private void InitializeGameMode(int score = 0, int numberOfLifes = 3, int timeleft = 61)
+    {
+        this.score = score;
+        this.timeleft = timeleft;
+        this.numberOfLifes = numberOfLifes;
+        textScoreInGame.text = "" + 0;
+    }
+
+    [SerializeField]
+    private GameObject gameObjectPlayerHealth;
+
+    [SerializeField]
+    private GameObject gameObjectOneVsOneTimerOn;
+
+    private void InitializeOneVsOneGameMode()
+    {
+        SetPlayerHealth();
+        SetPlayerTimer();
+
+        scoreLeftPlayer = 0;
+        scoreRightPlayer = 0;
+        textScoreLeftPlayer.text = "" + 0;
+        textScoreRightPlayer.text = "" + 0;
+    }
+
+    private void SetPlayerHealth()
+    {
+        if (GameMode.Instance.IsHealthOn)
+        {
+            gameObjectPlayerHealth.gameObject.SetActive(true);
+            numberOfLifesLeftPlayer = 3;
+            numberOfLifesRightPlayer = 3;
+        }
+        else
+            gameObjectPlayerHealth.gameObject.SetActive(false);
+    }
+
+    private void SetPlayerTimer()
+    {
+        if (GameMode.Instance.IsTimerOn)
+            gameObjectOneVsOneTimerOn.gameObject.SetActive(true);
+        else
+            gameObjectOneVsOneTimerOn.gameObject.SetActive(false);
+    }
+
+
+    private void SetBoolLeftAndRightAnimator(string name, Animator leftCircleAnimator, Animator rightCircleAnimator, bool boolValue)
     {
         leftCircleAnimator.SetBool(name, boolValue);
         rightCircleAnimator.SetBool(name, boolValue);
@@ -152,7 +263,7 @@ public class GameManager : MonoBehaviour
 
         if (gameModeType == GameModeType.Extreme)
         {
-            SetBoolLeftAndRightAnimaotr("isRotate", leftCircleAnimator, rightCircleAnimator, false);
+            SetBoolLeftAndRightAnimator("isRotate", leftCircleAnimator, rightCircleAnimator, false);
         }
 
         leftCircleAnimator.SetTrigger("correctIcon");
@@ -163,7 +274,7 @@ public class GameManager : MonoBehaviour
 
         if (gameModeType == GameModeType.Extreme)
         {
-            SetBoolLeftAndRightAnimaotr("isRotate", leftCircleAnimator, rightCircleAnimator, true);
+            SetBoolLeftAndRightAnimator("isRotate", leftCircleAnimator, rightCircleAnimator, true);
         }
 
     }
@@ -179,7 +290,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameModeType == GameModeType.Extreme)
         {
-            SetBoolLeftAndRightAnimaotr("isRotate", leftCircleAnimator, rightCircleAnimator, false);
+            SetBoolLeftAndRightAnimator("isRotate", leftCircleAnimator, rightCircleAnimator, false);
             yield return new WaitForSeconds(0.01f);
         }
 
@@ -207,9 +318,8 @@ public class GameManager : MonoBehaviour
 
         if (gameModeType == GameModeType.Extreme)
         {
-            SetBoolLeftAndRightAnimaotr("isRotate", leftCircleAnimator, rightCircleAnimator, true);
+            SetBoolLeftAndRightAnimator("isRotate", leftCircleAnimator, rightCircleAnimator, true);
         }
-
     }
 
     public void WrongIcon(string leftOrRightPlayer = "")
@@ -272,66 +382,21 @@ public class GameManager : MonoBehaviour
             gameOverGameObjectUI.SetActive(true);
 
             SaveScore(message);
-            
+
             if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServices && gameModeType == GameModeType.OneVSOne)
             {
                 Social.ReportProgress(GPGSIds.achievement_play_with_friends, 100.0f, null);
             }
 
-            SendProgressToGooglePlayServices();
-            SendAchivementProgress(score);
-
+            GooglePlayServicesManager.Instance.SendScoreToLeadership(score, gameModeType);
+            GooglePlayServicesManager.Instance.SendAchivementProgress(score, gameModeType);
 
             AudioManager.instance.PlayOnceClip(AudioClipType.gameOver);
             AdsManager.ShowIntersitialAd();
         }
     }
 
-    private void SendAchivementProgress(int score)
-    {
-        if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServices && gameModeType == GameModeType.Normal)
-        {
-            switch (score)
-            {
-                case 10:
-                    Social.ReportProgress(GPGSIds.achievement_10_score, 100.0f, null);
-                    break;
 
-                case 50:
-                    Social.ReportProgress(GPGSIds.achievement_50_score, 100.0f, null);
-                    break;
-
-                case 100:
-                    Social.ReportProgress(GPGSIds.achievement_100_score, 100.0f, null);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        else
-        {
-            Debug.Log("Not signed in .. unable to report score");
-        }
-    }
-
-    private void SendProgressToGooglePlayServices()
-    {
-        if (GooglePlayServicesManager.Instance.IsConnectedToGooglePlayServices && gameModeType == GameModeType.Normal)
-        {
-            Social.ReportScore(score, GPGSIds.leaderboard_top_score, (success) =>
-            {
-                if (!success)
-                {
-                    Debug.LogError("Unable to post highscore!");
-                }
-            });
-        }
-        else
-        {
-            Debug.Log("Not signed in .. unable to report score");
-        }
-    }
 
     private void SaveScore(string message)
     {
@@ -359,151 +424,6 @@ public class GameManager : MonoBehaviour
         }
         return false;
     }
-
-
-
-    private string iconPath = "";
-    List<Texture> allIcons;
-
-    [SerializeField]
-    private GameModeType gameModeType;
-    void Start()
-    {
-        if (string.IsNullOrEmpty(SaveData.Instance.SkinType))
-        {
-            iconPath = "Icons/Devices";
-        }
-        else
-        {
-            iconPath = "Icons/" + SaveData.Instance.SkinType;
-        }
-
-        leftCircleAnimator = leftCircle[0].transform.parent.gameObject.GetComponent<Animator>();
-        rightCircleAnimator = rightCircle[0].transform.parent.gameObject.GetComponent<Animator>();
-
-        Draw();
-
-        gameModeType = GameMode.Instance.GameModeType;
-        switch (gameModeType)
-        {
-            case GameModeType.Practice:
-                InitializePracticeGameMode();
-                break;
-            case GameModeType.Normal:
-                InitializeNormalGameMode();
-                break;
-            case GameModeType.OneVSOne:
-                InitializeOneVsOneGameMode();
-                break;
-            case GameModeType.Extreme:
-                InitializeExtremeGameMode();
-                break;
-        }
-
-        Draw();
-    }
-
-    private void InitializePracticeGameMode()
-    {
-        numberOfLifes = 3;
-        score = 0;
-        textScoreInGame.text = "" + 0;
-    }
-
-    private void InitializeNormalGameMode()
-    {
-        score = 0;
-        timeleft = 61;
-        numberOfLifes = 3;
-        textScoreInGame.text = "" + 0;
-    }
-
-    private void InitializeExtremeGameMode()
-    {
-        score = 0;
-        timeleft = 61;
-        numberOfLifes = 3;
-        textScoreInGame.text = "" + 0;
-        SetBoolLeftAndRightAnimaotr("isRotate", leftCircleAnimator, rightCircleAnimator, true);
-    }
-
-
-
-    [SerializeField]
-    private GameObject gameObjectPlayerHealth;
-
-    [SerializeField]
-    private GameObject gameObjectOneVsOneTimerOn;
-
-    private void SetPlayerHealth()
-    {
-        if (GameMode.Instance.IsHealthOn)
-        {
-            gameObjectPlayerHealth.gameObject.SetActive(true);
-            numberOfLifesLeftPlayer = 3;
-            numberOfLifesRightPlayer = 3;
-        }
-        else
-            gameObjectPlayerHealth.gameObject.SetActive(false);
-    }
-
-    private void SetPlayerTimer()
-    {
-        if (GameMode.Instance.IsTimerOn)
-            gameObjectOneVsOneTimerOn.gameObject.SetActive(true);
-        else
-            gameObjectOneVsOneTimerOn.gameObject.SetActive(false);
-    }
-
-    private void InitializeOneVsOneGameMode()
-    {
-        SetPlayerHealth();
-        SetPlayerTimer();
-
-        scoreLeftPlayer = 0;
-        scoreRightPlayer = 0;
-        textScoreLeftPlayer.text = "" + 0;
-        textScoreRightPlayer.text = "" + 0;
-    }
-
-    public void Draw()
-    {
-        allIcons = Resources.LoadAll<Texture>(iconPath).ToList();
-        numberOfObjectToFind = (short)Random.Range(0, 6);
-        AsignImages(leftCircle);
-        AsignImages(rightCircle);
-
-        //The same object
-        var currRandom = Random.Range(0, 6);
-
-        leftCircle[numberOfObjectToFind].GetComponent<IconManager>().SetIsDoubleIcon(true);
-        rightCircle[currRandom].GetComponent<IconManager>().SetIsDoubleIcon(true);
-        rightCircle[currRandom].GetComponent<RawImage>().texture = leftCircle[numberOfObjectToFind].GetComponent<RawImage>().texture;
-        rightCircle[currRandom].GetComponent<RawImage>().SetNativeSize();
-
-    }
-
-    private void AsignImages(GameObject[] circle)
-    {
-        int currRandom;
-
-        for (int i = 0; i < circle.Length; i++)
-        {
-            currRandom = Random.Range(0, allIcons.Count - 1);
-            circle[i].GetComponent<RawImage>().texture = allIcons[currRandom];
-
-            var randomRotate = Random.Range(0, 180);
-            circle[i].GetComponent<RectTransform>().Rotate(new Vector3(0, 0, randomRotate));
-            allIcons.RemoveAt(currRandom);
-
-            circle[i].GetComponent<RawImage>().SetNativeSize();
-            //1.3f when animals
-            circle[i].transform.localScale = new Vector3(1f, 1f, 1f);
-
-            circle[i].GetComponent<IconManager>().SetIsDoubleIcon(false);
-        }
-    }
-
 
     void FixedUpdate()
     {

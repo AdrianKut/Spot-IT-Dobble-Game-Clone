@@ -1,7 +1,5 @@
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GooglePlayServicesManager : MonoBehaviour
@@ -58,5 +56,54 @@ public class GooglePlayServicesManager : MonoBehaviour
         SSTools.ShowMessage(message, SSTools.Position.bottom, SSTools.Time.oneSecond);
     }
 
+
+    public void SendAchivementProgress(int score, GameModeType gameModeType)
+    {
+        if (IsConnectedToGooglePlayServices && gameModeType == GameModeType.Normal)
+        {
+            switch (score)
+            {
+                case 10:
+                    Social.ReportProgress(GPGSIds.achievement_10_score, 100.0f, null);
+                    break;
+
+                case 50:
+                    Social.ReportProgress(GPGSIds.achievement_50_score, 100.0f, null);
+                    break;
+
+                case 100:
+                    Social.ReportProgress(GPGSIds.achievement_100_score, 100.0f, null);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            Debug.Log("Not signed in .. unable to report score");
+        }
+    }
+
+
+    public void SendScoreToLeadership(int score, GameModeType gameModeType)
+    {
+        if (IsConnectedToGooglePlayServices && gameModeType == GameModeType.Normal)
+        {
+            Social.ReportScore(score, GPGSIds.leaderboard_top_score, (success) =>
+            {
+                if (!success)
+                {
+                    Debug.LogError("Unable to post highscore!");
+                }
+            });
+        }
+        else
+        {
+            Debug.Log("Not signed in .. unable to report score");
+        }
+    }
+
+
+
 }
- 
