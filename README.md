@@ -1,10 +1,10 @@
 # Spot IT Dobble Game Clone 
 
 <p float="left" align="center" padding="5" border-line=5px>
-  <img src="https://play-lh.googleusercontent.com/KYU9aPMaMn6u40PM7eOCkMh2NmDzCgDDBGiSCJulNj-vZR42hu1Knl_oqiHFqCD9VdY=w2560-h1440-rw" width="425" height="200" />
-  <img src="https://play-lh.googleusercontent.com/b9LCXm6t5jYmeCoAweW5gN2ky1bLI69sm66dI7VKgZMbKxHaMUZyjzzhDMTVUhl2k-c=w2560-h1440-rw" width="425" height="200" />
-  <img src="https://play-lh.googleusercontent.com/BalNvIX090lBOCeaqMoJsCRDl4K3ripJiSvfGPHPMwGEW1TXo54xGu1POHO9-Qdmog=w2560-h1440-rw" width="425" height="200" />
-  <img src="https://play-lh.googleusercontent.com/GeiZMTjqXDfh9BS5dU76Ds3y6O5vbd48bfv0sKgnfwuZs_4hTE1V2SvxXOtZtEhBMGEc=w2560-h1440-rw" width="425" height="200" />
+  <img src="https://play-lh.googleusercontent.com/KYU9aPMaMn6u40PM7eOCkMh2NmDzCgDDBGiSCJulNj-vZR42hu1Knl_oqiHFqCD9VdY=w2560-h1440-rw" width="400" height="200" />
+  <img src="https://play-lh.googleusercontent.com/b9LCXm6t5jYmeCoAweW5gN2ky1bLI69sm66dI7VKgZMbKxHaMUZyjzzhDMTVUhl2k-c=w2560-h1440-rw" width="400" height="200" />
+  <img src="https://play-lh.googleusercontent.com/BalNvIX090lBOCeaqMoJsCRDl4K3ripJiSvfGPHPMwGEW1TXo54xGu1POHO9-Qdmog=w2560-h1440-rw" width="400" height="200" />
+  <img src="https://play-lh.googleusercontent.com/GeiZMTjqXDfh9BS5dU76Ds3y6O5vbd48bfv0sKgnfwuZs_4hTE1V2SvxXOtZtEhBMGEc=w2560-h1440-rw" width="400" height="200" />
 </p>
 
 ## :bulb: About project
