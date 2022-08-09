@@ -9,10 +9,12 @@
 
 ## :bulb: About project
 - Lovely graphics
-- Practice without timer
-- Ranking with highscore
-- Extreme with rotating card
-- One vs One with a lot of custom settings
+- Practice mode without timer
+- Extreme mode with rotating card
+- One vs One mode with a few custom settings
+- Global ranking with highscore
+- Achievements to get
+- Connection with Google Services
 
 ## :vhs: Video 
 https://user-images.githubusercontent.com/51796886/178146087-94a1879a-edbb-4b6d-a2d4-de1153ce248b.mp4
