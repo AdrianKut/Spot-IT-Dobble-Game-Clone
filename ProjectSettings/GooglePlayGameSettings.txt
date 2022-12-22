@@ -1,0 +1,11 @@
+lastUpgrade=01012
+proj.pluginVersion=0.10.12
+proj.AppId=817697800259
+and.BundleId=com.Games96.SpotITDobbleGame
+proj.classDir=Assets
+proj.ConstantsClassName=GPGSIds
+and.ResourceData=%3c%3fxml+version%3d%221.0%22+encoding%3d%22utf-8%22%3f%3e%0d%0a%3c%21--Google+Play+game+services+IDs.+Save+this+file+as+res%2fvalues%2fgames-ids.xml+in+your+project.--%3e%0d%0a%3cresources%3e%0d%0a++%3c%21--app_id--%3e%0d%0a++%3cstring+name%3d%22app_id%22+translatable%3d%22false%22%3e817697800259%3c%2fstring%3e%0d%0a++%3c%21--package_name--%3e%0d%0a++%3cstring+name%3d%22package_name%22+translatable%3d%22false%22%3ecom.Games96.SpotITDobbleGame%3c%2fstring%3e%0d%0a++%3c%21--achievement+10+Score--%3e%0d%0a++%3cstring+name%3d%22achievement_10_score%22+translatable%3d%22false%22%3eCgkIw4DZlOYXEAIQAg%3c%2fstring%3e%0d%0a++%3c%21--achievement+50+Score--%3e%0d%0a++%3cstring+name%3d%22achievement_50_score%22+translatable%3d%22false%22%3eCgkIw4DZlOYXEAIQAw%3c%2fstring%3e%0d%0a++%3c%21--achievement+100+Score--%3e%0d%0a++%3cstring+name%3d%22achievement_100_score%22+translatable%3d%22false%22%3eCgkIw4DZlOYXEAIQBA%3c%2fstring%3e%0d%0a++%3c%21--achievement+Play+with+friends--%3e%0d%0a++%3cstring+name%3d%22achievement_play_with_friends%22+translatable%3d%22false%22%3eCgkIw4DZlOYXEAIQBQ%3c%2fstring%3e%0d%0a++%3c%21--leaderboard+Top+Score--%3e%0d%0a++%3cstring+name%3d%22leaderboard_top_score%22+translatable%3d%22false%22%3eCgkIw4DZlOYXEAIQAQ%3c%2fstring%3e%0d%0a%3c%2fresources%3e
+and.ClientId=817697800259-d5bknf9qdajplr9smci8ec9kbgj3i4go.apps.googleusercontent.com
+android.SetupDone=true
+App.NearbdServiceId=com.Games96.SpotITDobbleGame
+android.NearbySetupDone=true
